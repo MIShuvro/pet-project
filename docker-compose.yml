@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./database-data:/data/db
+    ports:
+      - 27017:27017
+  redis:
+    image: arm64v8/redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - .redis:/data
+    ports:
+      - 6379:6379
+
+  pet-project:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pet-project
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      MONGO_DB_URL: mongodb://root:example@mongo:27017/
+      APP_USER_SECRET: user
+      APP_ADMIN_SECRET: admin
+      REDIS_URL: redis
+      REDIS_KEY_PREFIX: ph
+      REDIS_DB_INDEX: 0
+    depends_on:
+      - mongodb
+      - redis
+
+    ports:
+      - 3000:3000
+
+
