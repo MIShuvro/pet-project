@@ -23,6 +23,8 @@ async function bootstrap() {
   let port = AppConfigService.appConfig.PORT
   await app.listen(port);
   Logger.log(await app.getUrl(), 'App Url');
+  Logger.log(await app.getUrl()+'/api-doc/', 'Swagger Url');
+  Logger.log("Go to github readme file for project docs");
 }
 
 bootstrap();
