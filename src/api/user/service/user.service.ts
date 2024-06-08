@@ -36,6 +36,9 @@ export class UserService {
     let user = await this.userRepository.findOne({
       email
     });
+    if (!user) {
+      return null;
+    }
     let group = await this.groupRepository.findOne({
       _id: user.group_id
     });
