@@ -1,5 +1,6 @@
-## Installation
+## Documentation
 
+## Installation
 ```bash
 $ npm install
 ```
