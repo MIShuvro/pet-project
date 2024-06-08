@@ -8,6 +8,7 @@ export class AppConfigService {
 
   constructor(private configService: ConfigService<EnvironmentVariables>) {
     AppConfigService.appConfig = {
+      PORT: +this.configService.get("PORT", "3000"),
       MONGO_DB_URL: this.configService.get("MONGO_DB_URL"),
       APP_USER_SECRET: this.configService.get("APP_USER_SECRET"),
       APP_ADMIN_SECRET: this.configService.get("APP_ADMIN_SECRET"),

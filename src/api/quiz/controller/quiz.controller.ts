@@ -37,8 +37,8 @@ export class QuizController {
   private readonly stop$ = new Subject<void>();
 
   @Post()
-  // @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_CREATE]))
-  // @ApiSecurity("admin-auth")
+  @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_CREATE]))
+  @ApiSecurity("admin-auth")
   @ApiCreatedResponse({ type: SwaggerBaseApiResponse(String, HttpStatus.CREATED) })
   async createQuiz(@Body() dto: QuizRequestDto, @Req() req: any): Promise<BaseApiResponse<String>> {
     await this.quizService.createQuiz(dto, req.user);
@@ -49,8 +49,6 @@ export class QuizController {
   }
 
   @Get()
-  // @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_VIEW]))
-  // @ApiSecurity("admin-auth")
   @ApiOkResponse({ type: SwaggerBaseApiResponse([QuizResponseDto], HttpStatus.OK) })
   async findQuiz(): Promise<BaseApiResponse<QuizResponseDto[]>> {
     let data = await this.quizService.findQuiz();
@@ -73,8 +71,8 @@ export class QuizController {
   }
 
   @Get("result-metrics")
-  // @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_VIEW]))
-  // @ApiSecurity("admin-auth")
+  @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_RESULT]))
+  @ApiSecurity("admin-auth")
   @ApiOkResponse({ type: SwaggerBaseApiResponse([QuizResultMetric], HttpStatus.OK) })
   async quizResultMetrics(@Query() query: QuizResultQueryRequestDto): Promise<BaseApiResponse<QuizResultMetric[]>> {
     let data = await this.quizService.quizResultMetric(query);
@@ -86,6 +84,8 @@ export class QuizController {
 
 
   @Sse("result-metrics/event")
+  @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_RESULT]))
+  @ApiSecurity("admin-auth")
   @ApiOkResponse({ type: SwaggerBaseApiResponse([QuizResultMetric], HttpStatus.OK) })
   async sendQuizResultMetricsEvent(): Promise<Observable<{ data: QuizResultMetric[], message: string }>> {
     return interval(1000).pipe(mergeMap(async (num) => {
@@ -95,6 +95,8 @@ export class QuizController {
   }
 
   @Get("stop-sending-event")
+  @UseGuards(PermissionGuard([ADMIN_PERMISSION.QUIZ_RESULT]))
+  @ApiSecurity("admin-auth")
   async stopEvents(): Promise<BaseApiResponse<String>> {
     this.stop$.next();
     return {

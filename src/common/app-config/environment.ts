@@ -6,4 +6,5 @@ export interface EnvironmentVariables {
   REDIS_URL: string;
   REDIS_KEY_PREFIX: string;
   REDIS_DB_INDEX: string;
+  PORT:number
 }

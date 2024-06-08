@@ -22,8 +22,6 @@ export class GroupController {
   }
 
   @Post()
-  @UseGuards(PermissionGuard([]))
-  @ApiSecurity("admin-auth")
   @ApiCreatedResponse({ type: SwaggerBaseApiResponse(GroupResponseDto, HttpStatus.CREATED) })
   async createGroup(@Body() dto: GroupRequestDto): Promise<BaseApiResponse<GroupResponseDto>> {
     let data = await this.groupService.createGroup(dto);
@@ -34,8 +32,6 @@ export class GroupController {
   }
 
   @Get()
-  @UseGuards(PermissionGuard([]))
-  @ApiSecurity("admin-auth")
   @ApiOkResponse({ type: SwaggerBaseApiResponse([GroupResponseDto], HttpStatus.OK) })
   async findGroup(): Promise<BaseApiResponse<GroupResponseDto[]>> {
     let data = await this.groupService.findGroup();

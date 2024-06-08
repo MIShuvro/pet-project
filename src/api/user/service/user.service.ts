@@ -8,6 +8,7 @@ import { GroupService } from "./group.service";
 import { GroupRepository } from "../repository/group.repository";
 import { GroupDocument } from "../schema/group.schema";
 import { PermissionService } from "./permission.service";
+import { GROUP_IDENTIFIER } from "../../../common/constants";
 
 
 @Injectable()
@@ -52,7 +53,12 @@ export class UserService {
     if (!isMongoId) {
       throw new BadRequestException("invalid group id");
     }
-    return await this.groupRepository.findOne({ _id: group_id });
+    let group = await this.groupRepository.findOne({ _id: group_id });
+    if (group.identifier != GROUP_IDENTIFIER.ADMIN) {
+      throw new BadRequestException("Group id must be admin type");
+    }
+
+    return group;
   }
 
   async createAdminUser(dto: UserRequestDto): Promise<UserResponseDto> {
@@ -93,8 +99,6 @@ export class UserService {
 
   checkPermission(user: IAuthorizedAdminUser, permissions: string[]): boolean {
     let userPermissions = user.permissions;
-    console.log("userPermissions===",userPermissions);
-    console.log("permissions===",permissions);
     return permissions.every(permission => userPermissions.includes(permission));
   }
 }

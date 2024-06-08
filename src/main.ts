@@ -3,6 +3,8 @@ import { ApiModule } from "./api/api.module";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 import { Logger, RequestMethod, ValidationPipe, VersioningType } from "@nestjs/common";
 import { setupSwagger } from "./common/swagger";
+import * as process from "process";
+import { AppConfigService } from "./common/app-config/service/app-config.service";
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule);
@@ -18,7 +20,8 @@ async function bootstrap() {
     type: VersioningType.URI
   });
   await setupSwagger(app);
-  await app.listen(3000,"0.0.0.0");
+  let port = AppConfigService.appConfig.PORT
+  await app.listen(port);
   Logger.log(await app.getUrl(), 'App Url');
 }
 

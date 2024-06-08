@@ -17,7 +17,6 @@ import { stringToMongooseObjectId } from "../../../common/utils";
 import { QuizResultRepository } from "../repository/quiz-result.repository";
 import { getPatternKey, getRedisQuizResultKey } from "../../../common/utils/redis.util";
 import { RedisClientService } from "../../../common/redis-client/service/redis-service";
-import process from "process";
 import { AppConfigService } from "../../../common/app-config/service/app-config.service";
 
 
@@ -29,7 +28,11 @@ export class QuizService {
               private redisClient: RedisClientService) {
   }
 
-  buildQuizOptionObject(options: QuizOption[], quiz: Quiz) {
+  buildQuizOptionObject(options: QuizOption[], quiz: Quiz): {
+    title: string,
+    is_correct: boolean,
+    quiz: Quiz
+  }[] {
     let optionsObject = [];
     options.forEach(option => {
       optionsObject.push({
@@ -116,8 +119,11 @@ export class QuizService {
   }
 
   async getQuizMetricsFromRedis(key: string): Promise<QuizResultMetric[]> {
-    let metrics: QuizResultMetric[] = JSON.parse(await this.redisClient.getValue(key));
-
+    let value = await this.redisClient.getValue(key);
+    let metrics: QuizResultMetric[] = [];
+    if (value) {
+      metrics = JSON.parse(value);
+    }
     return plainToInstance(QuizResultMetric, metrics, {
       excludeExtraneousValues: true,
       enableImplicitConversion: true

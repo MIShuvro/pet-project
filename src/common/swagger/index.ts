@@ -6,8 +6,8 @@ import * as process from "process";
 export async function setupSwagger(app: INestApplication) {
   let swaggerDocPath = "/api-doc";
   const config = new DocumentBuilder()
-    .setTitle("PH TASK")
-    .setDescription("PH API DOC")
+    .setTitle("Pet Project")
+    .setDescription("API DOC")
     .setVersion("1.0")
     .addApiKey(
       { type: "apiKey", name: "Authorization", in: "header", scheme: "bearer", bearerFormat: "Bearer" },

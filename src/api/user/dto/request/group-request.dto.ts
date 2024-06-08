@@ -10,7 +10,7 @@ export class GroupRequestDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ default: concatObject(PERMISSION_STATUS, "||") })
+  @ApiProperty({ default: concatObject(GROUP_IDENTIFIER, "||") })
   @IsString()
   @IsNotEmpty()
   @IsIn(Object.values(GROUP_IDENTIFIER))

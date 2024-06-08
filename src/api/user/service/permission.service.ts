@@ -43,15 +43,6 @@ export class PermissionService {
       enableImplicitConversion: true
     });
   }
-
-  async findOnePermissionByIdentifier(identifier: string): Promise<PermissionResponseDto> {
-    let permission = await this.permissionRepository.findOne({ identifier });
-    return plainToInstance(PermissionResponseDto, permission, {
-      excludeExtraneousValues: true,
-      enableImplicitConversion: true
-    });
-  }
-
   async assignPermission(dto: MapPermissionRequestDto): Promise<String> {
     let { user_id, permission_id } = dto;
     let permission = await this.findOnePermissionById(permission_id);
