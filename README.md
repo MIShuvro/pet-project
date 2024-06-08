@@ -40,6 +40,14 @@ $ npm run start:dev
 
 ```
 
+## Running the app using docker
+
+```bash
+# must have docker install
+$ docker compose up 
+
+```
+
 ## Test
 
 ```bash
